@@ -13,4 +13,4 @@ test:
 deploy:
 	@echo "Deploying the project..."
 	# Example deployment step
-	cp -r src/ /path/to/deploy/directory
+    xcopy /E /I src\* C:\Users\luism\Documents\projectdeploy
