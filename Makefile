@@ -1,4 +1,5 @@
-.PHONY: build docs test deploy
+.PHONY: build docs test deploy serve
+
 # Variables for server settings
 PORT = 8000
 LOG_FILE = server_log.txt
@@ -15,9 +16,9 @@ docs:
 	@powershell -Command "Write-Output 'Documentation generated successfully.' | Out-File -Append docs_log.txt"
 	@powershell -Command "Get-Content docs_log.txt"
 
-	@echo "Generating html..."
-	@cd docs && make html
-	@powershell -Command "Write-Output 'Documentation generated successfully.' | Out-File -Append docs_log.txt"
+	@echo "Generating HTML..."
+	@cd docs && make html || (echo "Error generating HTML" && exit 1)
+	@powershell -Command "Write-Output 'HTML documentation generated successfully.' | Out-File -Append docs_log.txt"
 	@powershell -Command "Get-Content docs_log.txt"
 
 test:
@@ -34,7 +35,6 @@ deploy:
 
 serve:
 	@echo "Starting HTTP server on port $(PORT)..."
-	@powershell -Command "Start-Process python -ArgumentList '-m http.server $(PORT) --directory docs' -NoNewWindow -RedirectStandardOutput $(LOG_FILE) -RedirectStandardError $(ERROR_LOG_FILE)"
-	@powershell -Command "Start-Sleep -Seconds 5"
-	@powershell -Command "Write-Output 'Server started on port $(PORT).' | Out-File -Append $(LOG_FILE)"
-	@powershell -Command "Get-Content $(LOG_FILE)"
+	@powershell -ExecutionPolicy Bypass -File serve.ps1
+
+
