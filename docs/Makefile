@@ -1,16 +1,32 @@
-build:
-    @echo "Building the project..."
-    # Add other build steps if necessary
+# Minimal makefile for Sphinx documentation
+#
 
-docs:
-    @echo "Building documentation..."
-    sphinx-build -b html docs/ docs/_build
+# You can set these variables from the command line, and also
+# from the environment for the first two.
+SPHINXOPTS    ?=
+SPHINXBUILD   ?= sphinx-build
+SOURCEDIR     = source
+BUILDDIR      = build
 
-test:
-    @echo "Running tests..."
-    pytest tests
+# Put it first so that "make" without argument is like "make help".
+help:
+	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-deploy:
-    @echo "Deploying the project..."
-    # Example deployment step
-    cp -r src/ /path/to/deploy/directory
+.PHONY: help Makefile clean html
+
+# Catch-all target: route all unknown targets to Sphinx using the new
+# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
+%: Makefile
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+# Target to clean build artifacts
+clean:
+	@echo "Cleaning up build artifacts..."
+	@rm -rf $(BUILDDIR)/*
+	@echo "Clean complete."
+
+# Target to generate HTML documentation with force rebuild
+html:
+	@echo "Generating HTML documentation..."
+	@$(SPHINXBUILD) -b html -a "$(SOURCEDIR)" "$(BUILDDIR)/html"
+	@echo "HTML documentation generated successfully."

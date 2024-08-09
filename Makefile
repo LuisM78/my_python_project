@@ -11,6 +11,11 @@ docs:
 	@powershell -Command "Write-Output 'Documentation generated successfully.' | Out-File -Append docs_log.txt"
 	@powershell -Command "Get-Content docs_log.txt"
 
+	@echo "Generating html..."
+	@cd docs && make html
+	@powershell -Command "Write-Output 'Documentation generated successfully.' | Out-File -Append docs_log.txt"
+	@powershell -Command "Get-Content docs_log.txt"
+
 test:
 	@echo "Running tests..."
 	pytest tests
