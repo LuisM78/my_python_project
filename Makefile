@@ -1,4 +1,8 @@
 .PHONY: build docs test deploy
+# Variables for server settings
+PORT = 8000
+LOG_FILE = server_log.txt
+ERROR_LOG_FILE = server_error_log.txt
 
 build:
 	@echo "Building the project..."
@@ -28,7 +32,9 @@ deploy:
 	@powershell -Command "Get-ChildItem C:\Users\luism\Documents\projectdeploy | Out-File -Append deploy_log.txt -Encoding utf8"
 	@powershell -Command "Get-Content deploy_log.txt -Encoding utf8"
 
-
-
-
-
+serve:
+	@echo "Starting HTTP server on port $(PORT)..."
+	@powershell -Command "Start-Process python -ArgumentList '-m http.server $(PORT) --directory docs' -NoNewWindow -RedirectStandardOutput $(LOG_FILE) -RedirectStandardError $(ERROR_LOG_FILE)"
+	@powershell -Command "Start-Sleep -Seconds 5"
+	@powershell -Command "Write-Output 'Server started on port $(PORT).' | Out-File -Append $(LOG_FILE)"
+	@powershell -Command "Get-Content $(LOG_FILE)"
